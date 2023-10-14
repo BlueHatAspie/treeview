@@ -1,0 +1,38 @@
+#!/usr/bin/python3
+
+
+import os
+import sys
+
+
+INDENT = '-' * 2
+
+
+def list_dir_files(path: str, LEVELS_DEEP: int):
+    this_dir = os.listdir(path)    
+    files: list = [file_path for file_path in this_dir if not os.path.isdir(f'{path}/{file_path}')]
+    directories: list = [file_path for file_path in this_dir if os.path.isdir(f'{path}/{file_path}')]
+    
+    print(f'|{INDENT * (LEVELS_DEEP - 1)} {path}/')
+    for file in files:
+        print(f'|{INDENT * LEVELS_DEEP} {file}')
+        
+    for directory in directories:
+        list_dir_files(f'{path}/{directory}', LEVELS_DEEP + 1)
+    
+
+def main():
+    ARGC = len(sys.argv)
+    if ARGC == 1:
+        dirs: list = [path for path in os.listdir() if os.path.isdir(path)]
+    else:
+        dirs: list = [path for path in sys.argv if os.path.isdir(path)]
+
+    for directory in dirs:
+        list_dir_files(directory, LEVELS_DEEP=1)
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    
